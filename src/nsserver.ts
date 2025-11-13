@@ -153,15 +153,9 @@ export class NSServer {
       // Note: to support multiple simultaneous connections, these messages will
       // need to be routed to a specific matching transport. (This logic isn't
       // implemented here, for simplicity.)
-      const headers = req.headers;
       const sessionId = req.query.sessionId as string;
+      await ApiKeyManager.loadAuthData(req);
       const transport = this.transports[sessionId];
-      if (headers) {
-        if (headers.authorization && headers.authorization.startsWith("Bearer")) {
-          const apiKey = headers.authorization.substring(7, headers.authorization.length);
-          ApiKeyManager.setApiKey(sessionId, apiKey);
-        }
-      }
       if (transport) {
         await transport.handlePostMessage(req, res);
       } else {
