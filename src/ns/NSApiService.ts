@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
-import { 
-  Disruption, 
-  GetDisruptionsArgs, 
-  TravelAdvice, 
+import {
+  Disruption,
+  GetDisruptionsArgs,
+  TravelAdvice,
   GetTravelAdviceArgs,
   DeparturesResponse,
   GetDeparturesArgs,
@@ -14,7 +14,7 @@ import {
   GetArrivalsArgs,
   PricesResponse,
   GetPricesArgs
-} from '../utils/types.js';
+} from './types.js';
 
 export class NSApiService {
   private axiosInstance: AxiosInstance;
