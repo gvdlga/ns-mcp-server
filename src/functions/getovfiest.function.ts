@@ -1,22 +1,20 @@
-import { ApiKeyManager } from "../utils/apikeymanager.js";
-import { McpFunction } from "./function.js";
+import { ApiKeyManager, McpFunction, ResponseFormatter } from "@geniusagents/mcp";
 import { z } from "zod";
-import { ResponseFormatter } from '../utils/ResponseFormatter.js';
-import { NSApiService } from '../services/NSApiService.js';
+import { NSApiService } from '../ns/NSApiService.js';
 
 export class GetOVFietsFunction implements McpFunction {
 
     public name: string = "get_ovfiets";
 
-    public description: string = "Get OV-fiets (bikes) availability at a train station" ;
+    public description: string = "Get OV-fiets (bikes) availability at a train station";
 
     public inputschema = {
         type: 'object',
         properties: {
-          stationCode: {
-            type: 'string',
-            description: 'Station code to check OV-fiets availability for (e.g., ASD for Amsterdam Centraal)',
-          }
+            stationCode: {
+                type: 'string',
+                description: 'Station code to check OV-fiets availability for (e.g., ASD for Amsterdam Centraal)',
+            }
         },
         required: ['stationCode']
     };
@@ -28,7 +26,7 @@ export class GetOVFietsFunction implements McpFunction {
             const sessionId = extra.sessionId;
             let apiKey: string | undefined;
             if (sessionId) {
-                apiKey = ApiKeyManager.getApiKey(sessionId);
+                apiKey = ApiKeyManager.getInstance().getApiKey(sessionId);
                 console.log("Api Key from ApiKeyManager: " + apiKey);
             } else {
                 apiKey = process.env.NS_API_KEY;

@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+ARG APP_VERSION=0.0.0-dev
+
 WORKDIR /ns-mcp-server
 
 # Copy package files
@@ -14,12 +16,9 @@ COPY ./src ./src
 # Build TypeScript to JavaScript
 RUN npm install
 
-# Copy fix in MCP code
-COPY ./sse_cjs.js ./node_modules/@modelcontextprotocol/sdk/dist/cjs/server/sse.js
-COPY ./sse_esm.js ./node_modules/@modelcontextprotocol/sdk/dist/esm/server/sse.js
-
 # Set environment variables
 ENV NODE_ENV=production
+ENV APP_VERSION=$APP_VERSION
 
 # Expose port
 EXPOSE 3003

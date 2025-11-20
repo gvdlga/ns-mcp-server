@@ -2,12 +2,12 @@ import { ApiKeyManager, McpFunction, ResponseFormatter } from "@geniusagents/mcp
 import { z } from "zod";
 import { NSApiService } from '../ns/NSApiService.js';
 
-export class GetArrivalsFunction implements McpFunction {
+export class GetDeparturesFunction implements McpFunction {
 
-  public name: string = "get_arrivals";
+  public name: string = "get_departures";
 
-  public description: string = "Get real-time arrival information for trains at a specific station, including platform numbers, delays, origin stations, and any relevant travel notes. " +
-    " Returns a list of upcoming arrivals with timing, origin, and status information.";
+  public description: string = "Get real-time departure information for trains from a specific station, including platform numbers, delays, route details, and any relevant travel notes. " +
+    " Returns a list of upcoming departures with timing, destination, and status information.";
 
   public inputschema = {
     type: 'object',
@@ -22,18 +22,18 @@ export class GetArrivalsFunction implements McpFunction {
       },
       dateTime: {
         type: 'string',
-        description: 'Format - date-time (as date-time in RFC3339). Only supported for arrivals at foreign stations. Defaults to server time (Europe/Amsterdam)',
+        description: 'Format - date-time (as date-time in RFC3339). Only supported for departures at foreign stations. Defaults to server time (Europe/Amsterdam)',
       },
       maxJourneys: {
         type: 'number',
-        description: 'Number of arrivals to return',
+        description: 'Number of departures to return',
         minimum: 1,
         maximum: 100,
         default: 40
       },
       lang: {
         type: 'string',
-        description: 'Language for localizing the arrivals list. Only a small subset of text is translated, mainly notes. Defaults to Dutch',
+        description: 'Language for localizing the departures list. Only a small subset of text is translated, mainly notes. Defaults to Dutch',
         enum: ['nl', 'en'],
         default: 'nl'
       }
@@ -66,7 +66,7 @@ export class GetArrivalsFunction implements McpFunction {
         }
       }
       const nsApiService = new NSApiService(apiKey);
-      const data = await nsApiService.getArrivals(args);
+      const data = await nsApiService.getDepartures(args);
       return ResponseFormatter.formatSuccess(data);
     } catch (error) {
       return ResponseFormatter.formatError(error);

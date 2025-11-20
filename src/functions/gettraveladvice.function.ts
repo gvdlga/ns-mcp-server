@@ -1,8 +1,6 @@
-import { ApiKeyManager } from "../utils/apikeymanager.js";
-import { McpFunction } from "./function.js";
+import { ApiKeyManager, McpFunction, ResponseFormatter } from "@geniusagents/mcp";
 import { z } from "zod";
-import { ResponseFormatter } from '../utils/ResponseFormatter.js';
-import { NSApiService } from '../services/NSApiService.js';
+import { NSApiService } from '../ns/NSApiService.js';
 
 export class GetTravelAdviceFunction implements McpFunction {
 
@@ -10,26 +8,26 @@ export class GetTravelAdviceFunction implements McpFunction {
 
     public description: string = "Get detailed travel routes between two train stations, including transfers, real-time updates, platform information, and journey duration." +
         " You can plan trips for immediate departure or for a specific departure time in the future, with options to optimize for arrival time. " +
-        " Returns multiple route options with status and crowding information." ;
+        " Returns multiple route options with status and crowding information.";
 
     public inputschema = {
         type: 'object',
         properties: {
             fromStation: {
-            type: 'string',
-            description: 'Name or code of departure station',
+                type: 'string',
+                description: 'Name or code of departure station',
             },
             toStation: {
-            type: 'string',
-            description: 'Name or code of destination station',
+                type: 'string',
+                description: 'Name or code of destination station',
             },
             dateTime: {
-            type: 'string',
-            description: 'Format - date-time (as date-time in RFC3339). Datetime that the user want to depart from his origin or or arrive at his destination',
+                type: 'string',
+                description: 'Format - date-time (as date-time in RFC3339). Datetime that the user want to depart from his origin or or arrive at his destination',
             },
             searchForArrival: {
-            type: 'boolean',
-            description: 'If true, dateTime is treated as desired arrival time otherwise as desired arrival time',
+                type: 'boolean',
+                description: 'If true, dateTime is treated as desired arrival time otherwise as desired arrival time',
             },
         },
         required: ['fromStation', 'toStation'],
@@ -42,7 +40,7 @@ export class GetTravelAdviceFunction implements McpFunction {
             const sessionId = extra.sessionId;
             let apiKey: string | undefined;
             if (sessionId) {
-                apiKey = ApiKeyManager.getApiKey(sessionId);
+                apiKey = ApiKeyManager.getInstance().getApiKey(sessionId);
                 console.log("Api Key from ApiKeyManager: " + apiKey);
             } else {
                 apiKey = process.env.NS_API_KEY;

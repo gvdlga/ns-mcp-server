@@ -1,16 +1,14 @@
-import { ApiKeyManager } from "../utils/apikeymanager.js";
-import { McpFunction } from "./function.js";
+import { ApiKeyManager, McpFunction, ResponseFormatter } from "@geniusagents/mcp";
 import { z } from "zod";
-import { ResponseFormatter } from '../utils/ResponseFormatter.js';
-import { NSApiService } from '../services/NSApiService.js';
+import { NSApiService } from '../ns/NSApiService.js';
 
 export class GetDisruptionsFunction implements McpFunction {
 
     public name: string = "get_disruptions";
 
-    public description: string = "Get comprehensive information about current and planned disruptions on the Dutch railway network." + 
-      " Returns details about maintenance work, unexpected disruptions, alternative transport options, impact on travel times, and relevant advice. "+
-      " You can filter for active disruptions and specific disruption types."
+    public description: string = "Get comprehensive information about current and planned disruptions on the Dutch railway network." +
+        " Returns details about maintenance work, unexpected disruptions, alternative transport options, impact on travel times, and relevant advice. " +
+        " You can filter for active disruptions and specific disruption types."
 
     public inputschema = {
         type: 'object',
@@ -34,7 +32,7 @@ export class GetDisruptionsFunction implements McpFunction {
             const sessionId = extra.sessionId;
             let apiKey: string | undefined;
             if (sessionId) {
-                apiKey = ApiKeyManager.getApiKey(sessionId);
+                apiKey = ApiKeyManager.getInstance().getApiKey(sessionId);
                 console.log("Api Key from ApiKeyManager: " + apiKey);
             } else {
                 apiKey = process.env.NS_API_KEY;
